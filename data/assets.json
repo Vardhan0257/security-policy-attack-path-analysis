@@ -1,0 +1,29 @@
+{
+  "assets": [
+    {
+      "id": "internet",
+      "type": "external"
+    },
+    {
+      "id": "web_server",
+      "type": "vm"
+    },
+    {
+      "id": "app_server",
+      "type": "vm"
+    },
+    {
+      "id": "database",
+      "type": "db",
+      "criticality": "high"
+    },
+    {
+      "id": "admin_user",
+      "type": "identity"
+    },
+    {
+      "id": "app_role",
+      "type": "iam_role"
+    }
+  ]
+}
