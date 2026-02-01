@@ -25,6 +25,19 @@ def explain_path(graph, path):
             )
     return explanation
 
+def score_path(graph, path):
+    score = 0
+
+    # Longer paths = more steps = higher risk
+    score += len(path)
+
+    # If target is critical, add weight
+    target = path[-1]
+    if graph.nodes[target].get("criticality") == "high":
+        score += 5
+
+    return score
+
 if __name__ == "__main__":
     graph = build_graph()
 
@@ -34,9 +47,19 @@ if __name__ == "__main__":
     attack_paths = find_attack_paths(graph, source, target)
 
     print("Discovered attack paths:\n")
+    scored_paths = []
+
     for path in attack_paths:
+        score = score_path(graph, path)
+        scored_paths.append((path, score))
+
+    scored_paths.sort(key=lambda x: x[1], reverse=True)
+
+    for path, score in scored_paths:
+        print(f"Attack Path (Risk Score: {score})")
         print(" -> ".join(path))
         reasons = explain_path(graph, path)
         for reason in reasons:
             print("  -", reason)
         print()
+
