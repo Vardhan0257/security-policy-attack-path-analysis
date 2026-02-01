@@ -53,7 +53,8 @@ def build_graph():
                 policy["Principal"],
                 policy["Resource"],
                 type="iam",
-                action=",".join(policy["Action"])
+                action=",".join(policy["Action"]),
+                condition=policy.get("Condition")
             )
 
     return G
