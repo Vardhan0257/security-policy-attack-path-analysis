@@ -1,0 +1,5 @@
+source,destination,action
+
+internet,web_server,allow
+web_server,app_server,allow
+app_server,database,allow
