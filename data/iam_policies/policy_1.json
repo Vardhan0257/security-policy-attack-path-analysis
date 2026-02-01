@@ -1,0 +1,6 @@
+{
+  "Effect": "Allow",
+  "Principal": "<IDENTITY_OR_ROLE_ID>",
+  "Action": ["read"],
+  "Resource": "<SENSITIVE_ASSET_ID>"
+}
