@@ -9,6 +9,38 @@ This project focuses on architectural security reasoning rather than enterprise-
 
 ---
 
+## Installation
+
+### From Source
+
+```bash
+git clone https://github.com/Vardhan0257/security-policy-attack-path-analysis.git
+cd security-policy-attack-path-analysis
+pip install -e .
+```
+
+### Development
+
+```bash
+pip install -e .[dev]
+```
+
+---
+
+## Usage
+
+### Command Line
+
+```bash
+attack-path-analyzer --source internet --target database --source_ip internal --time_of_day business_hours
+```
+
+### Python API
+
+See `examples/basic_usage.py` for a complete example.
+
+---
+
 ## Key Features
 - Graph-based modeling of assets, identities, and policies
 - Automatic discovery of attack paths caused by policy interactions

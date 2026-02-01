@@ -57,7 +57,7 @@ def score_path(graph, path):
 
     return score
 
-if __name__ == "__main__":
+def main_cli():
     parser = argparse.ArgumentParser(description="Analyze attack paths with IAM conditions.")
     parser.add_argument("--source", default="internet", help="Source node")
     parser.add_argument("--target", default="database", help="Target node")
@@ -92,4 +92,8 @@ if __name__ == "__main__":
         for reason in reasons:
             print("  -", reason)
         print()
+
+
+if __name__ == "__main__":
+    main_cli()
 
