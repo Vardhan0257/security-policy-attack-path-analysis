@@ -34,6 +34,18 @@ This project focuses on architectural security reasoning rather than enterprise-
 
 ---
 
+## Correctness-First Policy Semantics
+
+This project intentionally prioritizes *semantic correctness* over scale.
+
+Unlike topology-only attack graph models, access paths in this system are considered valid **only if policy conditions are satisfied under a given execution context**. Identity permissions may exist structurally but are pruned at analysis time if contextual constraints (e.g., source origin) are not met.
+
+This design demonstrates how effective exploitability depends not just on connectivity, but on *policy semantics*, and highlights why many naive attack-path tools overestimate risk.
+
+The controlled scope is a deliberate tradeoff to focus on reasoning accuracy rather than enterprise-scale data ingestion.
+
+---
+
 ## Technologies Used
 - Python
 - NetworkX
