@@ -46,6 +46,16 @@ def build_graph():
                 type="network"
             )
 
+    iam_policies = load_iam_policies("data/iam_policies")
+    for policy in iam_policies:
+        if policy["Effect"] == "Allow":
+            G.add_edge(
+                policy["Principal"],
+                policy["Resource"],
+                type="iam",
+                action=",".join(policy["Action"])
+            )
+
     return G
 
 if __name__ == "__main__":
@@ -58,5 +68,11 @@ if __name__ == "__main__":
     for src, dst, data in graph.edges(data=True):
         if data["type"] == "network":
             print(f"{src} -> {dst}")
+
+    print("\nIAM edges:")
+    for src, dst, data in graph.edges(data=True):
+        if data["type"] == "iam":
+            print(f"{src} -> {dst} ({data['action']})")
+
 
 
