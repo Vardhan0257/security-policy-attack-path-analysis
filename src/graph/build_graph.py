@@ -36,11 +36,27 @@ def build_graph():
             type=asset["type"],
             criticality=asset.get("criticality", "normal")
         )
+    
+    firewall_rules = load_firewall_rules("data/firewall_rules/rules.csv")
+    for rule in firewall_rules:
+        if rule["action"] == "allow":
+            G.add_edge(
+                rule["source"],
+                rule["destination"],
+                type="network"
+            )
+
     return G
 
 if __name__ == "__main__":
     graph = build_graph()
-    print("Nodes in graph:")
+    print("Nodes:")
     for node, data in graph.nodes(data=True):
         print(node, data)
+
+    print("\nNetwork edges:")
+    for src, dst, data in graph.edges(data=True):
+        if data["type"] == "network":
+            print(f"{src} -> {dst}")
+
 
