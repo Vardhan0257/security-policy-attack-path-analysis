@@ -2,5 +2,8 @@
   "Effect": "Allow",
   "Principal": "app_role",
   "Action": ["read"],
-  "Resource": "database"
+  "Resource": "database",
+  "Condition": {
+    "source_ip": "internal"
+  }
 }
