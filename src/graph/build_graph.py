@@ -28,8 +28,19 @@ def load_firewall_rules(path):
 
 def build_graph():
     G = nx.DiGraph()
+
+    assets = load_assets("data/assets.json")
+    for asset in assets:
+        G.add_node(
+            asset["id"],
+            type=asset["type"],
+            criticality=asset.get("criticality", "normal")
+        )
     return G
 
-
 if __name__ == "__main__":
-    print("Graph builder initialized")
+    graph = build_graph()
+    print("Nodes in graph:")
+    for node, data in graph.nodes(data=True):
+        print(node, data)
+
