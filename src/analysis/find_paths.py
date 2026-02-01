@@ -1,12 +1,30 @@
 import networkx as nx
 from src.graph.build_graph import build_graph
+from src.analysis.condition_evaluator import ConditionEvaluator
 
 
-def find_attack_paths(graph, source, target, max_depth=5):
-    paths = []
+def find_attack_paths(graph, source, target, context, max_depth=5):
+    evaluator = ConditionEvaluator(context)
+    valid_paths = []
+
     for path in nx.all_simple_paths(graph, source=source, target=target, cutoff=max_depth):
-        paths.append(path)
-    return paths
+        path_valid = True
+
+        for i in range(len(path) - 1):
+            src = path[i]
+            dst = path[i + 1]
+            edge = graph.get_edge_data(src, dst)
+
+            if edge["type"] == "iam":
+                condition = edge.get("condition")
+                if not evaluator.is_satisfied(condition):
+                    path_valid = False
+                    break
+
+        if path_valid:
+            valid_paths.append(path)
+
+    return valid_paths
 
 def explain_path(graph, path):
     explanation = []
@@ -44,7 +62,11 @@ if __name__ == "__main__":
     source = "internet"
     target = "database"
 
-    attack_paths = find_attack_paths(graph, source, target)
+    execution_context = {
+        "source_ip": "external"
+    }
+
+    attack_paths = find_attack_paths(graph, source, target, execution_context)
 
     print("Discovered attack paths:\n")
     scored_paths = []
