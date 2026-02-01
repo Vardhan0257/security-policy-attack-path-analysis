@@ -1,6 +1,7 @@
 import networkx as nx
 from src.graph.build_graph import build_graph
 from src.analysis.condition_evaluator import ConditionEvaluator
+from src.visualization import visualize_graph
 import argparse
 
 
@@ -64,6 +65,7 @@ def main_cli():
     parser.add_argument("--source_ip", default="external", help="Source IP context")
     parser.add_argument("--time_of_day", default="business_hours", help="Time of day context")
     parser.add_argument("--max_depth", type=int, default=5, help="Max path depth")
+    parser.add_argument("--visualize", action="store_true", help="Generate graph visualization")
 
     args = parser.parse_args()
 
@@ -92,6 +94,10 @@ def main_cli():
         for reason in reasons:
             print("  -", reason)
         print()
+
+    # Generate visualization if requested
+    if args.visualize:
+        visualize_graph(graph, attack_paths)
 
 
 if __name__ == "__main__":

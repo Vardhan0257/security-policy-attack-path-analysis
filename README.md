@@ -32,8 +32,10 @@ pip install -e .[dev]
 ### Command Line
 
 ```bash
-attack-path-analyzer --source internet --target database --source_ip internal --time_of_day business_hours
+attack-path-analyzer --source internet --target database --source_ip internal --time_of_day business_hours --visualize
 ```
+
+This generates an interactive HTML visualization of the graph with attack paths highlighted.
 
 ### Python API
 
