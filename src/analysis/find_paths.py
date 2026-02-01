@@ -1,6 +1,7 @@
 import networkx as nx
 from src.graph.build_graph import build_graph
 from src.analysis.condition_evaluator import ConditionEvaluator
+import argparse
 
 
 def find_attack_paths(graph, source, target, context, max_depth=5):
@@ -57,16 +58,23 @@ def score_path(graph, path):
     return score
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Analyze attack paths with IAM conditions.")
+    parser.add_argument("--source", default="internet", help="Source node")
+    parser.add_argument("--target", default="database", help="Target node")
+    parser.add_argument("--source_ip", default="external", help="Source IP context")
+    parser.add_argument("--time_of_day", default="business_hours", help="Time of day context")
+    parser.add_argument("--max_depth", type=int, default=5, help="Max path depth")
+
+    args = parser.parse_args()
+
     graph = build_graph()
 
-    source = "internet"
-    target = "database"
-
     execution_context = {
-        "source_ip": "external"
+        "source_ip": args.source_ip,
+        "time_of_day": args.time_of_day
     }
 
-    attack_paths = find_attack_paths(graph, source, target, execution_context)
+    attack_paths = find_attack_paths(graph, args.source, args.target, execution_context, args.max_depth)
 
     print("Discovered attack paths:\n")
     scored_paths = []

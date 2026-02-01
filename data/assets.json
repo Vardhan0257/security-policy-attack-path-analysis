@@ -24,6 +24,46 @@
     {
       "id": "app_role",
       "type": "iam_role"
+    },
+    {
+      "id": "load_balancer",
+      "type": "vm"
+    },
+    {
+      "id": "cache_server",
+      "type": "vm"
+    },
+    {
+      "id": "backup_db",
+      "type": "db"
+    },
+    {
+      "id": "dev_user",
+      "type": "identity"
+    },
+    {
+      "id": "admin_role",
+      "type": "iam_role"
+    },
+    {
+      "id": "external_api",
+      "type": "service"
+    },
+    {
+      "id": "internal_api",
+      "type": "service"
+    },
+    {
+      "id": "monitoring_server",
+      "type": "vm"
+    },
+    {
+      "id": "log_server",
+      "type": "vm"
+    },
+    {
+      "id": "vpn_gateway",
+      "type": "network_device"
     }
   ]
 }

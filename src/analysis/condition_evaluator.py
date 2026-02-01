@@ -17,15 +17,20 @@ class ConditionEvaluator:
     def is_satisfied(self, condition):
         """
         condition: dict from IAM policy
-        Returns True if condition holds, else False
+        Returns True if ALL conditions hold, else False
         """
-
         if not condition:
             return True
 
-        # Only one condition type supported intentionally
-        if "source_ip" in condition:
-            return self.context.get("source_ip") == condition["source_ip"]
+        for key, value in condition.items():
+            if key == "source_ip":
+                if self.context.get("source_ip") != value:
+                    return False
+            elif key == "time_of_day":
+                if self.context.get("time_of_day") != value:
+                    return False
+            else:
+                # Unknown conditions default to False
+                return False
 
-        # Unknown conditions default to False
-        return False
+        return True

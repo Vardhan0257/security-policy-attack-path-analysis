@@ -5,24 +5,37 @@ from pathlib import Path
 
 
 def load_assets(path):
-    with open(path, "r") as f:
-        return json.load(f)["assets"]
+    try:
+        with open(path, "r") as f:
+            return json.load(f)["assets"]
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Assets file not found: {path}")
+    except json.JSONDecodeError:
+        raise ValueError(f"Invalid JSON in assets file: {path}")
 
 
 def load_iam_policies(path):
     policies = []
-    for file in Path(path).glob("*.json"):
-        with open(file, "r") as f:
-            policies.append(json.load(f))
+    try:
+        for file in Path(path).glob("*.json"):
+            with open(file, "r") as f:
+                policies.append(json.load(f))
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON in IAM policy file: {e}")
     return policies
 
 
 def load_firewall_rules(path):
     rules = []
-    with open(path, "r") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            rules.append(row)
+    try:
+        with open(path, "r") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rules.append(row)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Firewall rules file not found: {path}")
+    except csv.Error:
+        raise ValueError(f"Invalid CSV in firewall rules file: {path}")
     return rules
 
 

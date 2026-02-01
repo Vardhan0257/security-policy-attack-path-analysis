@@ -1,5 +1,15 @@
 source,destination,action
 
-internet,web_server,allow
+internet,load_balancer,allow
+load_balancer,web_server,allow
 web_server,app_server,allow
+app_server,cache_server,allow
+app_server,backup_db,allow
+app_server,internal_api,allow
 app_server,app_role,allow
+internal_api,log_server,allow
+monitoring_server,database,allow
+vpn_gateway,admin_user,allow
+admin_user,admin_role,allow
+dev_user,app_role,allow
+external_api,web_server,allow

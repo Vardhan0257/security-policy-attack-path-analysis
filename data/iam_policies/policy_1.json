@@ -4,6 +4,7 @@
   "Action": ["read"],
   "Resource": "database",
   "Condition": {
-    "source_ip": "internal"
+    "source_ip": "internal",
+    "time_of_day": "business_hours"
   }
 }

@@ -46,6 +46,17 @@ The controlled scope is a deliberate tradeoff to focus on reasoning accuracy rat
 
 ---
 
+## Benchmark: Pruned vs. Unpruned Paths
+
+To demonstrate the impact of condition-aware analysis, we compare path discovery with and without IAM condition enforcement:
+
+- **Unpruned (Naive Topology-Only)**: 1 attack path found (ignores policy semantics).
+- **Pruned (Condition-Aware, External Source)**: 0 attack paths found when context violates conditions (e.g., external source IP).
+
+This shows how semantic correctness reduces false positives, making risk assessments more accurate.
+
+---
+
 ## Technologies Used
 - Python
 - NetworkX
