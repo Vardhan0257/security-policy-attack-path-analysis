@@ -41,6 +41,14 @@ include = ["src*"]
 [project.optional-dependencies]
 dev = [
     "pytest>=6.0",
-    "black",
-    "flake8",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "isort>=5.0",
+    "ruff>=0.1",
+    "mypy>=1.0",
+    "bandit[toml]>=1.7",
+    "detect-secrets>=1.4",
+    "pre-commit>=3.0",
+    "flake8>=6.0",
+    "safety>=2.0",
 ]

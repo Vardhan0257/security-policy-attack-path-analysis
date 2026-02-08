@@ -12,5 +12,8 @@ azure-identity>=1.14.0
 azure-mgmt-authorization>=2.15.0
 requests>=2.31.0
 pytest-asyncio>=0.21.0
-z3-solver>=4.12.2.0httpx>=0.25.0
+z3-solver>=4.12.2.0
+httpx>=0.25.0
 prometheus-client>=0.16.0
+slowapi>=0.1.8
+python-multipart>=0.0.6

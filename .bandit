@@ -1,0 +1,63 @@
+[bandit]
+# Bandit security scanning configuration
+exclude_dirs = [
+    'tests',
+    'docs',
+    '.venv',
+    'venv'
+]
+
+# Tests to run
+tests = [
+    'B101',  # assert_used
+    'B102',  # exec_used
+    'B103',  # set_bad_file_permissions
+    'B104',  # hardcoded_bind_all_interfaces
+    'B105',  # hardcoded_password_string
+    'B106',  # hardcoded_password_funcarg
+    'B107',  # hardcoded_password_default
+    'B108',  # hardcoded_tmp_directory
+    'B110',  # try_except_pass
+    'B112',  # try_except_continue
+    'B201',  # flask_debug_true
+    'B301',  # pickle
+    'B302',  # marshal
+    'B303',  # md5
+    'B304',  # ciphers
+    'B305',  # cipher_modes
+    'B306',  # mktemp_q
+    'B307',  # eval
+    'B308',  # mark_safe
+    'B309',  # httpsconnection
+    'B310',  # urllib_urlopen
+    'B311',  # random
+    'B312',  # telnetlib
+    'B313',  # xml_bad_etree
+    'B314',  # xml_bad_expat
+    'B315',  # xml_bad_sax
+    'B316',  # xml_bad_pulldom
+    'B317',  # xml_bad_etree
+    'B318',  # xml_bad_etree
+    'B319',  # xml_bad_etree
+    'B320',  # xml_bad_etree
+    'B321',  # pickle_load
+    'B322',  # unverified_context
+    'B323',  # unverified_request
+    'B324',  # hashlib
+    'B325',  # tempnam
+    'B601',  # paramiko_calls
+    'B602',  # shell_injection
+    'B603',  # subprocess_without_shell_equals_true
+    'B604',  # any_other_function_with_shell_equals_true
+    'B605',  # process_with_shell_injection
+    'B606',  # process_without_shell_injection
+    'B607',  # partial_parametrization
+    'B608',  # hardcoded_sql_string
+    'B609',  # paramiko_call_with_default_value
+    'B701',  # jinja2_autoescape_false
+]
+
+# Test IDs to skip
+skips = [
+    'B101',  # assert_used (ok in tests)
+]

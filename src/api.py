@@ -8,7 +8,7 @@ Provides endpoints for:
 - Cloud integration
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, WebSocket, Query
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, WebSocket, Query, Security
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse, Response
 try:
@@ -18,6 +18,15 @@ except Exception:
     Histogram = None
     generate_latest = None
     CONTENT_TYPE_LATEST = "text/plain; version=0.0.4; charset=utf-8"
+try:
+    from slowapi import Limiter
+    from slowapi.util import get_remote_address
+except Exception:
+    Limiter = None
+try:
+    from fastapi.security import HTTPBearer, HTTPAuthCredentials
+except Exception:
+    HTTPBearer = None
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from typing import List, Optional, Dict, Any
@@ -27,6 +36,7 @@ import asyncio
 import json
 from datetime import datetime
 import time
+import os
 
 from src.database import get_db, SessionLocal, init_db
 from src.database import ServiceAccount, Policy, AnalysisJob, AttackPath, AnalysisCache
@@ -307,6 +317,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Rate limiting (optional, if slowapi available)
+limiter = None
+if Limiter is not None:
+    limiter = Limiter(key_func=get_remote_address)
+    app.state.limiter = limiter
+    app.add_exception_handler(Exception, lambda request, exc: JSONResponse(
+        status_code=429,
+        content={"detail": "Rate limit exceeded"}
+    ) if "rate" in str(exc).lower() else None)
+
+# API Key authentication (optional, if HTTPBearer available)
+API_KEY = os.getenv("API_KEY", None)  # Set in production
+security = None
+if HTTPBearer is not None:
+    security = HTTPBearer(auto_error=False)
+    
+    async def verify_api_key(credentials: Optional[HTTPAuthCredentials] = Depends(security if HTTPBearer else lambda: None)):
+        """Verify API key from Authorization header (optional if API_KEY not set)."""
+        if API_KEY is None:
+            # No API key required in development
+            return None
+        
+        if credentials is None:
+            raise HTTPException(
+                status_code=403,
+                detail="Missing API key"
+            )
+        
+        if credentials.credentials != API_KEY:
+            raise HTTPException(
+                status_code=403,
+                detail="Invalid API key"
+            )
+        
+        return credentials.credentials
+
 
 @app.middleware("http")
 async def prometheus_middleware(request, call_next):
@@ -318,8 +364,9 @@ async def prometheus_middleware(request, call_next):
             REQUEST_COUNT.labels(request.method, request.url.path, response.status_code).inc()
         if REQUEST_LATENCY is not None:
             REQUEST_LATENCY.labels(request.url.path).observe(elapsed)
-    except Exception:
-        pass
+    except Exception as e:  # nosec B110 - Prometheus metrics collection failure is non-critical
+        # Log but don't fail request if metrics unavailable
+        logger.debug(f"Metrics collection error: {e}")
     return response
 
 # Global cache for graph (loaded once)
@@ -1213,9 +1260,13 @@ if __name__ == "__main__":
     
     logging.basicConfig(level=logging.INFO)
     
+    # Use environment variables for host and port (configurable, defaults to 0.0.0.0 for containers)
+    api_host = os.getenv("API_HOST", "0.0.0.0")  # nosec B104 - Container-safe default
+    api_port = int(os.getenv("API_PORT", "8000"))
+    
     uvicorn.run(
         app,
-        host="0.0.0.0",
-        port=8000,
+        host=api_host,
+        port=api_port,
         log_level="info"
     )
